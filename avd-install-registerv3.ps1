@@ -72,6 +72,17 @@ try {
 }
 
 # -----------------------------
+# Disable DVD / CD-ROM
+# -----------------------------
+try {
+    Write-Log "Disabling CD-ROM driver so Azure virtual DVD is removed after reboot"
+    Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\cdrom' -Name Start -Value 4 -Type DWord
+    Write-Log "CD-ROM driver disabled successfully"
+} catch {
+    Write-Log "Failed to disable CD-ROM driver: $($_.Exception.Message)" 'WARN'
+}
+
+# -----------------------------
 # Basic validation
 # -----------------------------
 if (-not $RegistrationToken -or $RegistrationToken.Trim().Length -lt 16) {
